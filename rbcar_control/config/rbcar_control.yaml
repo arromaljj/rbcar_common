@@ -1,37 +1,37 @@
 robotnik_base_control:
-  type: ackermann_drive_controller/AckermannDriveController
+  type: "ackermann_drive_controller/AckermannDriveController"
   traction:
     front_right:
-      joint_name: $(arg prefix)right_front_axle
+      joint_name: "$(arg prefix)right_front_axle"
       max_speed: 20.0 # rad/s
     front_left:
-      joint_name: $(arg prefix)left_front_axle
+      joint_name: "$(arg prefix)left_front_axle"
       max_speed: 20.0 # rad/s
     back_right:
-      joint_name: $(arg prefix)right_rear_axle
+      joint_name: "$(arg prefix)right_rear_axle"
       max_speed: 20.0 # rad/s
     back_left:
-      joint_name: $(arg prefix)left_rear_axle
+      joint_name: "$(arg prefix)left_rear_axle"
       max_speed: 20.0 # rad/s
   steer:
     front_right:
-      joint_name: $(arg prefix)right_steering_joint
+      joint_name: "$(arg prefix)right_steering_joint"
       min_angle: -0.7 # rads
       max_angle: 0.7
     front_left:
-      joint_name: $(arg prefix)left_steering_joint
+      joint_name: "$(arg prefix)left_steering_joint"
       min_angle: -0.7 # rads
       max_angle: 0.7
   linear_speed_limit: 10
   linear_acceleration_limit: 1.0
   angular_speed_limit: 2.0
-  angular_acceleration_limit: 2.0 
-  odom_frame: $(arg odom_frame)
-  robot_base_frame: $(arg base_frame)
-  odom_broadcast_tf: $(arg odom_broadcast_tf) # this value will be overwritten in the launch
-  odom_topic: odom
-  command_topic: $(arg cmd_vel)
-  applied_command_topic: applied_cmd_vel
+  angular_acceleration_limit: 2.0
+  odom_frame: "$(arg odom_frame)"
+  robot_base_frame: "$(arg base_frame)"
+  odom_broadcast_tf: "$(arg odom_broadcast_tf)" # this value will be overwritten in the launch
+  odom_topic: "odom"
+  command_topic: "$(arg cmd_vel)"
+  applied_command_topic: "applied_cmd_vel"
   wheel_base: 1.834
   track_width: 0.80
   wheel_diameter: 0.634 # 0.185... calibrated, 0.186 from cad
@@ -39,23 +39,38 @@ robotnik_base_control:
   odom_publish_frequency: 100
   #use_angular_velocity_as_steering_angle: true
 
+
 joint_read_state_controller:
-  type: joint_state_controller/JointStateController 
+  type: "joint_state_controller/JointStateController"
   publish_rate: 100.0
 
 joint_read_command_controller:
-  type: joint_read_command_controller/JointReadCommandController
+  type: "joint_read_command_controller/JointReadCommandController"
 
 joint_pan_position_controller:
-  type: velocity_controllers/JointPositionController
-  joint: $(arg prefix)front_ptz_camera_pan_joint
+  type: "velocity_controllers/JointPositionController"
+  joint: "$(arg prefix)front_ptz_camera_pan_joint"
   pid: {p: 100.0, i: 0.01, d: 10.0}
 
 joint_tilt_position_controller:
-  type: velocity_controllers/JointPositionController
-  joint: $(arg prefix)front_ptz_camera_tilt_joint
+  type: "velocity_controllers/JointPositionController"
+  joint: "$(arg prefix)front_ptz_camera_tilt_joint"
   pid: {p: 100.0, i: 0.01, d: 10.0}
 
 elevator_controller:
-  type: position_controllers/JointPositionController
-  joint: $(arg prefix)elevator_joint
+  type: "position_controllers/JointPositionController"
+  joint: "$(arg prefix)elevator_joint"
+  pid: {p: 100.0, i: 0.01, d: 10.0}
+
+# New PID configurations for the joints mentioned in the error messages
+gazebo_ros_control:
+  pid_gains:
+    robot_left_steering_joint: {p: 100.0, i: 0.01, d: 10.0}
+    robot_left_front_axle: {p: 100.0, i: 0.01, d: 10.0}
+    robot_right_steering_joint: {p: 100.0, i: 0.01, d: 10.0}
+    robot_right_front_axle: {p: 100.0, i: 0.01, d: 10.0}
+    robot_left_rear_axle: {p: 100.0, i: 0.01, d: 10.0}
+    robot_right_rear_axle: {p: 100.0, i: 0.01, d: 10.0}
+    robot_elevator_joint: {p: 100.0, i: 0.01, d: 10.0}
+    robot_front_ptz_camera_pan_joint: {p: 100.0, i: 0.01, d: 10.0}
+    robot_front_ptz_camera_tilt_joint: {p: 100.0, i: 0.01, d: 10.0}
